@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>11월 달력</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .color-picker {
+            margin-bottom: 20px;
+        }
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-block;
+            cursor: pointer;
+            margin: 0 5px;
+            border: 1px solid #ccc;
+        }
+        .color-option:hover {
+            border: 2px solid black;
+        }
+        .clear-option {
+            margin-left: 20px;
+            padding: 10px 20px;
+            background-color: #f4f4f4;
+            cursor: pointer;
+            border: 1px solid #ccc;
+        }
+        .clear-option:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>11월 달력</h1>
+    <div class="color-picker">
+        <span class="color-option" style="background-color: red;" data-color="red"></span>
+        <span class="color-option" style="background-color: green;" data-color="green"></span>
+        <span class="color-option" style="background-color: blue;" data-color="blue"></span>
+        <span class="color-option" style="background-color: yellow;" data-color="yellow"></span>
+        <span class="color-option" style="background-color: orange;" data-color="orange"></span>
+        <span class="color-option" style="background-color: purple;" data-color="purple"></span>
+        <span class="clear-option" id="clearColor">색 지우기</span>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>일</th>
+                <th>월</th>
+                <th>화</th>
+                <th>수</th>
+                <th>목</th>
+                <th>금</th>
+                <th>토</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td><td></td><td></td><td class="day" data-day="1">1</td><td class="day" data-day="2">2</td><td class="day" data-day="3">3</td><td class="day" data-day="4">4</td>
+            </tr>
+            <tr>
+                <td class="day" data-day="5">5</td><td class="day" data-day="6">6</td><td class="day" data-day="7">7</td><td class="day" data-day="8">8</td><td class="day" data-day="9">9</td><td class="day" data-day="10">10</td><td class="day" data-day="11">11</td>
+            </tr>
+            <tr>
+                <td class="day" data-day="12">12</td><td class="day" data-day="13">13</td><td class="day" data-day="14">14</td><td class="day" data-day="15">15</td><td class="day" data-day="16">16</td><td class="day" data-day="17">17</td><td class="day" data-day="18">18</td>
+            </tr>
+            <tr>
+                <td class="day" data-day="19">19</td><td class="day" data-day="20">20</td><td class="day" data-day="21">21</td><td class="day" data-day="22">22</td><td class="day" data-day="23">23</td><td class="day" data-day="24">24</td><td class="day" data-day="25">25</td>
+            </tr>
+            <tr>
+                <td class="day" data-day="26">26</td><td class="day" data-day="27">27</td><td class="day" data-day="28">28</td><td class="day" data-day="29">29</td><td class="day" data-day="30">30</td><td></td><td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <button id="saveButton">저장하기</button>
+
+    <script>
+        let selectedColor = '';
+        let savedColors = JSON.parse(localStorage.getItem('calendarColors')) || {};
+
+        // 색상 선택 핸들러
+        document.querySelectorAll('.color-option').forEach(option => {
+            option.addEventListener('click', function() {
+                selectedColor = this.getAttribute('data-color');
+            });
+        });
+
+        // 색 지우기 버튼 핸들러
+        document.getElementById('clearColor').addEventListener('click', function() {
+            selectedColor = '';
+        });
+
+        // 날짜 클릭 시 색 변경 및 저장
+        document.querySelectorAll('.day').forEach(cell => {
+            const day = cell.getAttribute('data-day');
+            
+            // 저장된 색상 적용
+            if (savedColors[day]) {
+                cell.style.backgroundColor = savedColors[day];
+            }
+            
+            cell.addEventListener('click', function() {
+                if (selectedColor) {
+                    this.style.backgroundColor = selectedColor;
+                    savedColors[day] = selectedColor; // 색상 저장
+                } else {
+                    this.style.backgroundColor = '';
+                    delete savedColors[day]; // 색상 지우기
+                }
+            });
+        });
+
+        // 저장 버튼 핸들러
+        document.getElementById('saveButton').addEventListener('click', function() {
+            localStorage.setItem('calendarColors', JSON.stringify(savedColors));
+            alert('저장되었습니다!');
+        });
+
+        // 페이지 로드 시 로컬스토리지에 저장된 색상 불러오기
+        window.onload = function() {
+            document.querySelectorAll('.day').forEach(cell => {
+                const day = cell.getAttribute('data-day');
+                if (savedColors[day]) {
+                    cell.style.backgroundColor = savedColors[day];
+                }
+            });
+        };
+    </script>
+
+</body>
+</html>
