@@ -1,0 +1,7 @@
+; Godot project file (minimal)
+config_version=4
+
+[application]
+config/name="탑뷰-DnD-RPG"
+config/description="Godot 4 프로젝트 - 탑뷰 D&D 스타일 RPG 스타터"
+run/main_scene="res://scenes/main.tscn"

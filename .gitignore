@@ -1,0 +1,13 @@
+# Godot-specific
+.export/
+.import/
+.godot/
+*.import
+*.mono/
+.local/
+.locales/
+# OS
+.DS_Store
+Thumbs.db
+# Build artifacts
+bin/
